@@ -1,0 +1,29 @@
+# FinTrack
+
+Aplicação web de controle financeiro pessoal. Interface single-page sem dependências de backend, com persistência via localStorage.
+
+## Funcionalidades
+
+- Registro de receitas e despesas por categoria
+- Transações recorrentes mensais
+- Metas de economia com acompanhamento de progresso
+- Dashboard com graficos de evolucao mensal e distribuicao por categoria
+- Resumo com analise automatica de saude financeira
+- Exportacao de dados em CSV e PDF
+- Tema claro e escuro
+
+## Tecnologias
+
+- HTML, CSS e JavaScript puro
+- Chart.js 4.4 (via CDN)
+- localStorage para persistencia de dados
+
+## Como usar
+
+Abra o arquivo `index.html` diretamente no navegador ou acesse via GitHub Pages.
+
+Nenhuma instalacao ou dependencia necessaria.
+
+## Licenca
+
+MIT
