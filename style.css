@@ -1,0 +1,366 @@
+/* importa as fontes Inter (textos) e Syne (títulos e valores) do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+
+/* zera margin e padding de todos os elementos */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* VARIÁVEIS DE COR — TEMA ESCURO */
+:root[data-theme="dark"]{
+  --bg:#0c0c10;--bg2:#111118;--surface:#16161f;--surface2:#1e1e2a;
+  --border:#26263a;--border2:#32324a;
+  --pink:#e879a0;--pink-glow:rgba(232,121,160,.18);--pink-dim:#c0557c;
+  --green:#2dd4a0;--green-glow:rgba(45,212,160,.12);
+  --red:#f07070;--red-glow:rgba(240,112,112,.12);
+  --amber:#fbbf24;--amber-glow:rgba(251,191,36,.12);
+  --blue:#60a5fa;--blue-glow:rgba(96,165,250,.12);
+  --text:#eeeef5;--text2:#b0b0c8;--muted:#6a6a88;
+  --shadow:0 4px 24px rgba(0,0,0,.5);--radius:16px;
+}
+
+/* VARIÁVEIS DE COR — TEMA CLARO */
+:root[data-theme="light"]{
+  --bg:#f4f4f8;--bg2:#eeeef4;--surface:#ffffff;--surface2:#f8f8fc;
+  --border:#e2e2ec;--border2:#d4d4e4;
+  --pink:#d6518a;--pink-glow:rgba(214,81,138,.1);--pink-dim:#b03870;
+  --green:#0ea876;--green-glow:rgba(14,168,118,.1);
+  --red:#e05555;--red-glow:rgba(224,85,85,.1);
+  --amber:#d97706;--amber-glow:rgba(217,119,6,.1);
+  --blue:#3b82f6;--blue-glow:rgba(59,130,246,.1);
+  --text:#18181f;--text2:#44445a;--muted:#8888a8;
+  --shadow:0 4px 24px rgba(0,0,0,.08);--radius:16px;
+}
+
+/* estilo base do body: fonte, fundo e transição suave de tema */
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+
+/* HEADER */
+
+/* barra fixa no topo com logo e botões */
+header{padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:200}
+
+/* logo clicável com ícone e nome do app */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.logo-icon{width:34px;height:34px}
+.logo-text{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;letter-spacing:-.02em}
+
+/* "Fin" fica na cor do texto, "Track" fica rosa */
+.logo-text .fin{color:var(--text)}.logo-text .track{color:var(--pink)}
+.header-right{display:flex;align-items:center;gap:8px}
+
+/* botão de ícone (tema) no header */
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn:hover{border-color:var(--pink);color:var(--pink)}
+
+/* NAV TABS */
+
+/* barra de abas de navegação com scroll horizontal em telas pequenas */
+.nav-tabs{display:flex;gap:4px;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 40px;overflow-x:auto}
+
+/* botão de cada aba */
+.nav-tab{padding:12px 18px;font-size:0.84rem;font-weight:600;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;font-family:'Inter',sans-serif}
+
+/* aba ativa fica rosa com borda embaixo */
+.nav-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
+.nav-tab:hover:not(.active){color:var(--text2)}
+
+/* PÁGINAS */
+
+/* todas as páginas ficam escondidas por padrão */
+.page{display:none}.page.active{display:block}
+
+/* container principal centralizado com espaçamento */
+main{max-width:1120px;margin:0 auto;padding:28px 24px;display:grid;gap:20px}
+
+/* CARDS DE RESUMO (saldo, receitas, despesas) */
+
+/* grade com 3 colunas iguais */
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* estilo base de cada card de resumo */
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 26px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+
+/* sobe levemente ao passar o mouse */
+.summary-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+
+/* brilho decorativo no canto inferior direito do card */
+.summary-card .glow{position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;filter:blur(40px);pointer-events:none}
+
+/* cor do brilho em cada tipo de card */
+.summary-card.saldo .glow{background:var(--pink-glow)}
+.summary-card.receita .glow{background:var(--green-glow)}
+.summary-card.despesa .glow{background:var(--red-glow)}
+
+/* rótulo pequeno em maiúsculas acima do valor */
+.summary-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;font-weight:600}
+
+/* valor em destaque com fonte Syne */
+.summary-value{font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:700;letter-spacing:-.02em}
+
+/* cor do valor em cada tipo de card */
+.summary-card.saldo .summary-value{color:var(--pink)}
+.summary-card.receita .summary-value{color:var(--green)}
+.summary-card.despesa .summary-value{color:var(--red)}
+
+/* tag pequena embaixo do valor */
+.summary-badge{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:.72rem;font-weight:500;padding:3px 8px;border-radius:20px}
+
+/* variantes de cor da tag */
+.badge-pink{background:var(--pink-glow);color:var(--pink)}
+.badge-green{background:var(--green-glow);color:var(--green)}
+.badge-red{background:var(--red-glow);color:var(--red)}
+
+/* GRADE DO MEIO (formulário e histórico) */
+
+/* formulário ocupa 360px fixos, histórico ocupa o resto */
+.middle-grid{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start}
+
+/* card genérico com fundo e borda */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+
+/* título do card em maiúsculas pequenas */
+.card-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:20px}
+
+/* cabeçalho do card com título e botões lado a lado */
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.card-header .card-title{margin-bottom:0}
+
+/* FORMULÁRIO */
+
+/* espaçamento entre cada campo do formulário */
+.form-group{margin-bottom:12px}
+
+/* rótulo dos campos */
+label{display:block;font-size:.78rem;font-weight:500;color:var(--text2);margin-bottom:5px}
+
+/* estilo base de inputs e selects */
+input,select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+
+/* destaque rosa ao focar no campo */
+input:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+
+/* cor de fundo das opções do select */
+select option{background:var(--surface)}
+
+/* toggle de receita/despesa com dois botões */
+.tipo-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:4px}
+
+/* botão do toggle */
+.tipo-btn{padding:9px;border-radius:9px;border:none;background:transparent;color:var(--muted);font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+
+/* botão ativo de receita fica verde */
+.tipo-btn.active.receita{background:var(--surface);box-shadow:0 1px 6px rgba(0,0,0,.2);color:var(--green)}
+
+/* botão ativo de despesa fica vermelho */
+.tipo-btn.active.despesa{background:var(--surface);box-shadow:0 1px 6px rgba(0,0,0,.2);color:var(--red)}
+
+/* botão principal de adicionar transação */
+.btn-add{width:100%;padding:12px;background:var(--pink);color:white;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:6px;font-family:'Inter',sans-serif}
+.btn-add:hover{background:var(--pink-dim);box-shadow:0 4px 16px var(--pink-glow)}
+.btn-add:active{transform:scale(.98)}
+
+/* label do checkbox de transação recorrente */
+.recorrente-check{display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:.84rem;color:var(--text2)}
+.recorrente-check input[type=checkbox]{width:auto;accent-color:var(--pink)}
+
+/* FILTROS */
+
+/* barra de filtros com campos em linha */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.filter-bar input,.filter-bar select{flex:1;min-width:120px;padding:8px 12px;font-size:.82rem}
+
+/* botão de limpar filtros */
+.btn-clear{padding:8px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.82rem;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-clear:hover{color:var(--red);border-color:var(--red)}
+
+/* LISTA DE TRANSAÇÕES */
+
+/* lista com scroll vertical limitado */
+.transaction-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
+
+/* scrollbar fina e discreta */
+.transaction-list::-webkit-scrollbar{width:4px}
+.transaction-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* cada item da lista */
+.transaction-item{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;animation:fadeIn .2s ease;transition:border-color .2s}
+.transaction-item:hover{border-color:var(--border2)}
+
+/* transações recorrentes têm borda âmbar à esquerda */
+.transaction-item.recorrente-item{border-left:3px solid var(--amber)}
+
+/* animação suave de entrada do item */
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+
+/* lado esquerdo do item: ícone e textos */
+.transaction-info{display:flex;align-items:center;gap:12px}
+
+/* quadradinho com o emoji da categoria */
+.transaction-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+
+/* cor de fundo do ícone por tipo */
+.icon-receita{background:var(--green-glow)}.icon-despesa{background:var(--red-glow)}
+
+/* nome da transação em negrito */
+.transaction-desc{font-size:.88rem;font-weight:600}
+
+/* categoria e data embaixo do nome */
+.transaction-meta{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+/* tag de recorrente ao lado do nome */
+.recorrente-tag{font-size:.65rem;background:var(--amber-glow);color:var(--amber);padding:1px 6px;border-radius:6px;margin-left:6px}
+
+/* lado direito do item: valor e botão de deletar */
+.transaction-right{display:flex;align-items:center;gap:12px}
+
+/* valor com destaque em fonte Syne */
+.transaction-value{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700}
+
+/* cor do valor por tipo */
+.val-receita{color:var(--green)}.val-despesa{color:var(--red)}
+
+/* botão de remover transação */
+.btn-del{width:28px;height:28px;background:none;border:1px solid transparent;border-radius:7px;color:var(--muted);cursor:pointer;font-size:.8rem;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.btn-del:hover{border-color:var(--red);color:var(--red);background:var(--red-glow)}
+
+/* mensagem exibida quando a lista está vazia */
+.empty-state{text-align:center;color:var(--muted);font-size:.84rem;padding:40px 0;line-height:1.7}
+.empty-state .emoji{font-size:2rem;display:block;margin-bottom:10px}
+
+/* GRÁFICOS */
+
+/* grade com dois gráficos lado a lado */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* container do gráfico com altura fixa */
+.chart-wrap{position:relative;height:240px;display:flex;align-items:center;justify-content:center}
+
+/* METAS */
+
+/* grade responsiva para os cards de meta */
+.metas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+/* card de cada meta */
+.meta-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative}
+
+/* brilho decorativo no canto do card de meta */
+.meta-card .glow{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;filter:blur(30px);pointer-events:none;background:var(--pink-glow)}
+
+/* topo do card: nome/prazo à esquerda e botão de deletar à direita */
+.meta-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+
+/* nome da meta em destaque */
+.meta-nome{font-weight:700;font-size:.95rem}
+
+/* prazo em texto pequeno */
+.meta-prazo{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+/* botão de remover a meta */
+.meta-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;transition:color .2s}
+.meta-del:hover{color:var(--red)}
+
+/* linha com valor guardado e valor alvo */
+.meta-valores{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text2);margin-bottom:8px}
+
+/* valor guardado em rosa */
+.meta-valor-atual{font-family:'Syne',sans-serif;font-weight:700;color:var(--pink)}
+
+/* barra de progresso: fundo */
+.meta-progress-bg{height:8px;background:var(--bg2);border-radius:8px;overflow:hidden}
+
+/* preenchimento da barra de progresso com gradiente rosa-âmbar */
+.meta-progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--pink),var(--amber));transition:width .6s ease}
+
+/* percentual de progresso alinhado à direita */
+.meta-pct{font-size:.72rem;color:var(--muted);margin-top:6px;text-align:right}
+
+/* quando a meta está concluída, a barra fica verde */
+.meta-concluida .meta-progress-fill{background:linear-gradient(90deg,var(--green),#2dd4a0)}
+
+/* formulário de nova meta com borda tracejada */
+.meta-add-form{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:20px;border-style:dashed}
+.meta-add-form .card-title{margin-bottom:16px}
+
+/* grade com dois campos lado a lado (valor e prazo) */
+.meta-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* botão de criar meta */
+.btn-meta-add{grid-column:1/-1;padding:10px;background:var(--pink);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;font-size:.88rem;transition:all .2s}
+.btn-meta-add:hover{background:var(--pink-dim)}
+
+/* campo de depósito dentro do card de meta */
+.meta-depositar{display:flex;gap:8px;margin-top:12px}
+.meta-depositar input{flex:1;padding:7px 10px;font-size:.82rem}
+
+/* botão de guardar dinheiro na meta */
+.btn-depositar{padding:7px 14px;background:var(--green-glow);border:1px solid var(--green);color:var(--green);border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:600;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .2s}
+.btn-depositar:hover{background:var(--green);color:#fff}
+
+/* RESUMO INTELIGENTE */
+
+/* grade responsiva dos cards de insight */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+
+/* card de insight com ícone e texto lado a lado */
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;gap:14px;align-items:flex-start}
+
+/* emoji grande do insight */
+.insight-icon{font-size:1.6rem;flex-shrink:0;margin-top:2px}
+
+/* título do insight */
+.insight-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
+
+/* texto explicativo do insight */
+.insight-text{font-size:.82rem;color:var(--text2);line-height:1.6}
+
+/* tag de categoria do insight */
+.insight-tag{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+
+/* variantes de cor da tag de insight */
+.tag-alert{background:var(--red-glow);color:var(--red)}
+.tag-ok{background:var(--green-glow);color:var(--green)}
+.tag-tip{background:var(--blue-glow);color:var(--blue)}
+.tag-warn{background:var(--amber-glow);color:var(--amber)}
+
+/* EXPORTAÇÃO */
+
+/* barra com botões de exportar alinhados à direita */
+.export-bar{display:flex;gap:10px;justify-content:flex-end;margin-bottom:8px}
+
+/* botão de exportar */
+.btn-export{padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-export:hover{border-color:var(--pink);color:var(--pink)}
+
+/* TOAST (notificação temporária) */
+
+/* notificação que aparece no canto inferior direito */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 20px;font-size:.84rem;font-weight:500;color:var(--text);box-shadow:var(--shadow);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:999}
+
+/* quando a classe .show é adicionada, o toast aparece */
+.toast.show{transform:translateY(0);opacity:1}
+
+/* MODAL */
+
+/* overlay escuro por trás do modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:300;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+
+/* caixa do modal centralizada */
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;width:90%;max-width:440px;animation:fadeIn .2s ease}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:20px}
+.modal-close{float:right;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+
+/* RESPONSIVIDADE — telas menores que 780px */
+@media(max-width:780px){
+  /* empilha os cards e gráficos em coluna única */
+  .summary-grid,.charts-grid{grid-template-columns:1fr}
+
+  /* formulário e histórico também ficam empilhados */
+  .middle-grid{grid-template-columns:1fr}
+
+  /* reduz o padding lateral do header e do menu */
+  header,.nav-tabs{padding-left:16px;padding-right:16px}
+  main{padding:16px}
+
+  /* formulário de meta vira coluna única */
+  .meta-form-grid{grid-template-columns:1fr}
+}
