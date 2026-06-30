@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinTrack — Finanças Pessoais</title>
+
+  <!-- arquivo de estilos da aplicação -->
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- biblioteca de gráficos Chart.js carregada pelo CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- CABEÇALHO FIXO NO TOPO -->
+<header>
+
+  <!-- logo clicável que leva para o dashboard -->
+  <a class="logo" onclick="showPage('dashboard')">
+    <svg class="logo-icon" viewBox="0 0 34 34" fill="none">
+      <rect width="34" height="34" rx="10" fill="var(--pink)" fill-opacity=".15"/>
+      <path d="M9 24 L14 17 L19 20 L25 11" stroke="var(--pink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="25" cy="11" r="2.5" fill="var(--pink)"/>
+      <path d="M9 27 H25" stroke="var(--border2)" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <!-- nome do app com duas cores diferentes -->
+    <div class="logo-text"><span class="fin">Fin</span><span class="track">Track</span></div>
+  </a>
+
+  <!-- botões do lado direito do cabeçalho -->
+  <div class="header-right">
+    <!-- botão para alternar entre tema claro e escuro -->
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- MENU DE NAVEGAÇÃO COM AS ABAS -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="showPage('dashboard')" id="tab-dashboard">📊 Dashboard</button>
+  <button class="nav-tab" onclick="showPage('transacoes')" id="tab-transacoes">💳 Transações</button>
+  <button class="nav-tab" onclick="showPage('metas')" id="tab-metas">🎯 Metas</button>
+  <button class="nav-tab" onclick="showPage('insights')" id="tab-insights">💡 Resumo Inteligente</button>
+</nav>
+
+<!-- PÁGINA: DASHBOARD -->
+<div class="page active" id="page-dashboard">
+<main>
+
+  <!-- cards de resumo: saldo, receitas e despesas -->
+  <div class="summary-grid">
+
+    <!-- card do saldo atual -->
+    <div class="summary-card saldo">
+      <div class="glow"></div>
+      <div class="summary-label">Saldo atual</div>
+      <div class="summary-value" id="totalSaldo">R$ 0,00</div>
+      <div class="summary-badge badge-pink">💳 disponível</div>
+    </div>
+
+    <!-- card do total de receitas -->
+    <div class="summary-card receita">
+      <div class="glow"></div>
+      <div class="summary-label">Total de receitas</div>
+      <div class="summary-value" id="totalReceitas">R$ 0,00</div>
+      <div class="summary-badge badge-green">↑ entradas</div>
+    </div>
+
+    <!-- card do total de despesas -->
+    <div class="summary-card despesa">
+      <div class="glow"></div>
+      <div class="summary-label">Total de despesas</div>
+      <div class="summary-value" id="totalDespesas">R$ 0,00</div>
+      <div class="summary-badge badge-red">↓ saídas</div>
+    </div>
+  </div>
+
+  <!-- grade do meio: formulário de nova transação e histórico recente -->
+  <div class="middle-grid">
+
+    <!-- formulário para adicionar uma nova transação -->
+    <div class="card">
+      <div class="card-title">Nova transação</div>
+
+      <!-- botões para escolher entre receita e despesa -->
+      <div class="tipo-toggle">
+        <button class="tipo-btn receita active" id="btnReceita" onclick="setTipo('receita')">↑ Receita</button>
+        <button class="tipo-btn despesa" id="btnDespesa" onclick="setTipo('despesa')">↓ Despesa</button>
+      </div>
+
+      <!-- campo de descrição da transação -->
+      <div class="form-group"><label>Descrição</label><input type="text" id="desc" placeholder="Ex: Salário, Aluguel..."/></div>
+
+      <!-- campo de valor em reais -->
+      <div class="form-group"><label>Valor (R$)</label><input type="number" id="valor" placeholder="0,00" min="0" step="0.01"/></div>
+
+      <!-- select de categoria com grupos de receita e despesa -->
+      <div class="form-group"><label>Categoria</label>
+        <select id="categoria">
+          <option value="">Selecione...</option>
+          <optgroup label="Receitas">
+            <option value="Salário">💼 Salário</option>
+            <option value="Freelance">💻 Freelance</option>
+            <option value="Investimentos">📊 Investimentos</option>
+            <option value="Outros">✨ Outros</option>
+          </optgroup>
+          <optgroup label="Despesas">
+            <option value="Alimentação">🍔 Alimentação</option>
+            <option value="Transporte">🚌 Transporte</option>
+            <option value="Moradia">🏠 Moradia</option>
+            <option value="Saúde">💊 Saúde</option>
+            <option value="Educação">📚 Educação</option>
+            <option value="Lazer">🎮 Lazer</option>
+            <option value="Outros">📦 Outros</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- campo de data da transação -->
+      <div class="form-group"><label>Data</label><input type="date" id="data"/></div>
+
+      <!-- checkbox para marcar se a transação se repete todo mês -->
+      <label class="recorrente-check"><input type="checkbox" id="recorrente"/> Transação recorrente mensal 🔁</label>
+
+      <!-- botão que chama a função de adicionar -->
+      <button class="btn-add" onclick="addTransaction()">Adicionar transação</button>
+    </div>
+
+    <!-- card com as transações mais recentes -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Histórico recente</div>
+
+        <!-- botões para exportar os dados -->
+        <div class="export-bar" style="margin:0">
+          <button class="btn-export" onclick="exportCSV()">⬇ CSV</button>
+          <button class="btn-export" onclick="exportPDF()">⬇ PDF</button>
+        </div>
+      </div>
+
+      <!-- lista de transações recentes preenchida pelo JavaScript -->
+      <div class="transaction-list" id="transactionListDash"></div>
+    </div>
+  </div>
+
+  <!-- grade dos gráficos: pizza de categorias e linha mensal -->
+  <div class="charts-grid">
+
+    <!-- gráfico de rosca com despesas por categoria -->
+    <div class="card">
+      <div class="card-title">Despesas por categoria</div>
+      <div class="chart-wrap">
+        <canvas id="pieChart"></canvas>
+        <!-- mensagem exibida quando não há despesas ainda -->
+        <div id="pieEmpty" class="empty-state" style="display:none"><span class="emoji">📊</span>Sem despesas ainda</div>
+      </div>
+    </div>
+
+    <!-- gráfico de linha com evolução mensal de receitas e despesas -->
+    <div class="card">
+      <div class="card-title">Evolução mensal</div>
+      <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- PÁGINA: TRANSAÇÕES -->
+<div class="page" id="page-transacoes">
+<main>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Todas as transações</div>
+
+      <!-- botões de exportação -->
+      <div class="export-bar" style="margin:0">
+        <button class="btn-export" onclick="exportCSV()">⬇ CSV</button>
+        <button class="btn-export" onclick="exportPDF()">⬇ PDF</button>
+      </div>
+    </div>
+
+    <!-- barra de filtros para buscar e filtrar transações -->
+    <div class="filter-bar">
+      <!-- campo de busca por texto -->
+      <input type="text" id="filtroTexto" placeholder="🔍 Buscar..." oninput="renderTransacoes()"/>
+
+      <!-- filtro por tipo (receita ou despesa) -->
+      <select id="filtroTipo" onchange="renderTransacoes()">
+        <option value="">Todos os tipos</option>
+        <option value="receita">↑ Receitas</option>
+        <option value="despesa">↓ Despesas</option>
+      </select>
+
+      <!-- filtro por categoria -->
+      <select id="filtroCategoria" onchange="renderTransacoes()">
+        <option value="">Todas as categorias</option>
+        <option value="Salário">💼 Salário</option>
+        <option value="Freelance">💻 Freelance</option>
+        <option value="Investimentos">📊 Investimentos</option>
+        <option value="Alimentação">🍔 Alimentação</option>
+        <option value="Transporte">🚌 Transporte</option>
+        <option value="Moradia">🏠 Moradia</option>
+        <option value="Saúde">💊 Saúde</option>
+        <option value="Educação">📚 Educação</option>
+        <option value="Lazer">🎮 Lazer</option>
+        <option value="Outros">📦 Outros</option>
+      </select>
+
+      <!-- filtro por mês, populado dinamicamente pelo JavaScript -->
+      <select id="filtroMes" onchange="renderTransacoes()">
+        <option value="">Todos os meses</option>
+      </select>
+
+      <!-- botão para limpar todos os filtros de uma vez -->
+      <button class="btn-clear" onclick="limparFiltros()">✕ Limpar</button>
+    </div>
+
+    <!-- lista completa de transações com scroll -->
+    <div class="transaction-list" id="transactionListAll" style="max-height:600px"></div>
+  </div>
+</main>
+</div>
+
+<!-- PÁGINA: METAS -->
+<div class="page" id="page-metas">
+<main>
+  <!-- grade com a lista de metas à esquerda e o formulário à direita -->
+  <div class="metas-layout">
+
+    <!-- área onde os cards de meta são renderizados -->
+    <div>
+      <div class="metas-grid" id="metasGrid">
+        <!-- mensagem padrão quando não há metas criadas -->
+        <div class="empty-state" style="grid-column:1/-1"><span class="emoji">🎯</span>Nenhuma meta criada ainda.<br/>Adicione uma meta ao lado!</div>
+      </div>
+    </div>
+
+    <!-- formulário para criar uma nova meta -->
+    <div class="card meta-add-form">
+      <div class="card-title">Nova meta</div>
+
+      <!-- nome da meta -->
+      <div class="form-group"><label>Nome da meta</label><input type="text" id="metaNome" placeholder="Ex: Viagem, Emergência..."/></div>
+
+      <!-- valor alvo e prazo lado a lado -->
+      <div class="meta-form-grid">
+        <div class="form-group"><label>Valor alvo (R$)</label><input type="number" id="metaAlvo" placeholder="0,00" min="0" step="0.01"/></div>
+        <div class="form-group"><label>Prazo</label><input type="month" id="metaPrazo"/></div>
+      </div>
+
+      <!-- botão para criar a meta -->
+      <button class="btn-meta-add" onclick="addMeta()">+ Criar meta</button>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- PÁGINA: RESUMO INTELIGENTE -->
+<div class="page" id="page-insights">
+<main>
+
+  <!-- card de cabeçalho da página -->
+  <div class="card" style="margin-bottom:0">
+    <div class="card-title">Resumo inteligente</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:20px">Análise automática das suas finanças com dicas personalizadas.</p>
+  </div>
+
+  <!-- grade de cards de insight, preenchida pelo JavaScript -->
+  <div class="insight-grid" id="insightGrid">
+    <!-- mensagem padrão enquanto não há transações -->
+    <div class="empty-state" style="grid-column:1/-1"><span class="emoji">💡</span>Adicione transações para ver seus insights!</div>
+  </div>
+</main>
+</div>
+
+<!-- notificação temporária que aparece no canto da tela -->
+<div class="toast" id="toast"></div>
+
+<!-- arquivo JavaScript com toda a lógica da aplicação -->
+<script src="script.js"></script>
+</body>
+</html>
